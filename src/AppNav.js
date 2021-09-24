@@ -18,21 +18,19 @@ export default function AppNav(props){
                 </ButtonGroup>
             </Grid>
             <Grid item style={{padding:'0.5rem'}}>
-                    <InputLabel id="demo-simple-select-autowidth-label">Programming languge</InputLabel>
+                    <InputLabel id="demo-simple-select-autowidth-label">Programming language</InputLabel>
                     <Select 
                     style={{width:'100%'}}
                     labelId="demo-simple-select-autowidth-label"
                     id="demo-simple-select-autowidth"
-                    /*value={age}*/
+                    value={props.lang}
                     onChange={props.handleChange}
                     autoWidth
                     >
-                    <MenuItem value="">
-                        <em>None</em>
-                    </MenuItem>
-                    {langChoice.map((lang) => (
-                        <MenuItem value={lang} id={langChoice.findIndex(lang)}>{lang}</MenuItem>
-                    ))}
+                        
+                        {langChoice.map((lang) => (
+                            <MenuItem value={lang} key={lang}>{lang}</MenuItem>
+                        ))}
                     </Select>
             </Grid>
         </Grid>

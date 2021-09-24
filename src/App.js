@@ -53,7 +53,7 @@ class App extends React.Component {
     super(props);
     this.state = {
       source: initialText,
-      lang: null
+      lang: 'javascript'
     }
     this.handleChange = this.handleChange.bind(this)
     this.langChange = this.langChange.bind(this)
@@ -67,12 +67,14 @@ class App extends React.Component {
     ))
   }
   langChange(e){
+    console.log('langChange triggered', e.target.value)
     this.setState((state) => (
       {
-      source: state.source,
-      lang: e.target.value
+        source: state.source,
+        lang: e.target.value
     }
     ))
+    console.log(this.state)
   }
   render (){
     return (
@@ -85,12 +87,12 @@ class App extends React.Component {
           style={{ minHeight: '100vh'}}
         >
           <Grid item md={6} sm={12} style={{width:'100%'}}>
-            <AppNav handleChange={this.langChange}/>
+            <AppNav handleChange={this.langChange} lang={this.state.lang}/>
           </Grid>
           <Grid item md={6} sm={12} style={{width:'100%'}}>
             <Editor id="editor" onChange={this.handleChange} text={this.state.source} />            
           </Grid>
-          <Grid md={6} sm={12}>
+          <Grid item md={6} sm={12}>
             <Paper style={{padding:'2.5%'}} elevation={7}>
               <Previewer id="preview" data={this.state.source} lang={this.state.lang}/>
             </Paper>

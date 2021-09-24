@@ -5,27 +5,34 @@ import {coy} from 'react-syntax-highlighter/dist/esm/styles/prism'
 import TopWinMenu from './topWinMenu'
 
 export default function Previewer(props){
+    let lang = props.lang
     return (
       <div>
         <TopWinMenu name="Previewer" />
         <ReactMarkdown children={props.data} remarkPlugins={[remarkGfm]}
         components={{
             code({node, inline, className, children, ...props}) {
+              console.log(lang)
               const match = /lang-(\w+)/.exec(children || '')
-              console.log(props.lang)
               return !inline && match ? (
                 <SyntaxHighlighter
                   children={String(children).replace(/\n$|lang-(\w+)/, '')}
                   style={coy}
-                  language={match[1]||props.lang}
+                  language={match[1]}
                   PreTag="div"
                   {...props}
                 />
-              ) : (
-                <code className={className} {...props}>
-                  {children}
-                </code>
-              )
+              ) : !inline && lang ? <SyntaxHighlighter
+                      children={String(children).replace(/\n$|lang-(\w+)/, '')}
+                      style={coy}
+                      language={lang}
+                      PreTag="div"
+                      {...props}
+                    /> :(
+                        <code className={className} {...props}>
+                          {children}
+                        </code>
+                      )
             },
             img({node, inline, className, children, ...props}) {
                 return (
