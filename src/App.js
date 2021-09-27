@@ -21,6 +21,16 @@ function anotherExample(firstLine, lastLine) {
 }
 \`\`\`
 
+\`\`\`
+lang-py
+# and this is multiline code with highlighting syntax of Python
+
+@decorator
+def foo(*args, **kargs):
+    print('Hello, World')
+
+\`\`\`
+
 You can also make text **bold**... whoa!
 Or _italic_.
 Or... wait for it... **_both!_**
@@ -48,17 +58,25 @@ And here. | Okay. | I think we get it.
 
 ![freeCodeCamp Logo](https://cdn.freecodecamp.org/testable-projects-fcc/images/fcc_secondary.svg)`
 
+const FULL_SCREEN = 'FULL SCREEN';
+const HIDE = 'HIDE';
+const DEFAULT = 'DEFAULT';
+
 class App extends React.Component {
   constructor(props){
     super(props);
     this.state = {
       source: initialText,
-      lang: 'javascript'
+      lang: 'javascript',
+      editor: DEFAULT,
+      viewer: DEFAULT
     }
-    this.handleChange = this.handleChange.bind(this)
+    this.handleEditorTextChange = this.handleEditorTextChange.bind(this)
     this.langChange = this.langChange.bind(this)
+    this.changeVisibility = this.changeVisibility.bind(this)
   }
-  handleChange(e){
+
+  handleEditorTextChange(e){
     this.setState((state) => (
       {
         source: e.target.value,
@@ -66,16 +84,21 @@ class App extends React.Component {
       }
     ))
   }
+
   langChange(e){
-    console.log('langChange triggered', e.target.value)
     this.setState((state) => (
       {
         source: state.source,
         lang: e.target.value
     }
     ))
-    console.log(this.state)
   }
+
+  changeVisibility(status){
+    let window = this.changeVisibility.window;
+    this.setState((state) => Object.assign(state, {[window]: FULL_SCREEN}))
+  }
+
   render (){
     return (
       <Grid
@@ -87,19 +110,22 @@ class App extends React.Component {
           style={{ minHeight: '100vh'}}
         >
           <Grid item md={6} sm={12} style={{width:'100%'}}>
-            <AppNav handleChange={this.langChange} lang={this.state.lang}/>
+            <AppNav handleChange={this.langChange} lang={this.state.lang} changeVisibility={this.changeVisibility}/>
           </Grid>
-          <Grid item md={6} sm={12} style={{width:'100%'}}>
-            <Editor id="editor" onChange={this.handleChange} text={this.state.source} />            
-          </Grid>
-          <Grid item md={6} sm={12}>
+
+          {(this.state.editor)? <Grid item md={6} sm={12} style={{width:'100%'}}>
+            <Editor id="editor" onChange={this.handleEditorTextChange} text={this.state.source} />            
+          </Grid> : null}
+          
+          {(this.state.viewer)? <Grid item md={6} sm={12}>
             <Paper style={{padding:'2.5%'}} elevation={7}>
               <Previewer id="preview" data={this.state.source} lang={this.state.lang}/>
             </Paper>
-          </Grid>
+          </Grid> : null}
+          
         </Grid>
     );
   }
 }
-
+export {DEFAULT, FULL_SCREEN, HIDE};
 export default App;
