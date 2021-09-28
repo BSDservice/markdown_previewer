@@ -2,7 +2,8 @@ import React from 'react';
 import Editor from './editor';
 import Previewer from './previewer';
 import {Grid, Paper} from '@material-ui/core';
-import AppNav from './AppNav'
+import AppNav from './AppNav';
+import { Player } from '@lottiefiles/react-lottie-player';
 
 var initialText = `# Welcome to my React Markdown Previewer!
 
@@ -58,9 +59,6 @@ And here. | Okay. | I think we get it.
 
 ![freeCodeCamp Logo](https://cdn.freecodecamp.org/testable-projects-fcc/images/fcc_secondary.svg)`
 
-const FULL_SCREEN = 'FULL SCREEN';
-const HIDE = 'HIDE';
-const DEFAULT = 'DEFAULT';
 
 class App extends React.Component {
   constructor(props){
@@ -68,8 +66,8 @@ class App extends React.Component {
     this.state = {
       source: initialText,
       lang: 'javascript',
-      editor: DEFAULT,
-      viewer: DEFAULT
+      editor: true,
+      viewer: true
     }
     this.handleEditorTextChange = this.handleEditorTextChange.bind(this)
     this.langChange = this.langChange.bind(this)
@@ -77,55 +75,58 @@ class App extends React.Component {
   }
 
   handleEditorTextChange(e){
-    this.setState((state) => (
-      {
-        source: e.target.value,
-        lang: state.lang
-      }
-    ))
+    this.setState((state) => Object.assign(state, {source: e.target.value}))
   }
 
   langChange(e){
-    this.setState((state) => (
-      {
-        source: state.source,
-        lang: e.target.value
-    }
-    ))
+    this.setState((state) => Object.assign(state, {lang: e.target.value}))
   }
 
   changeVisibility(status){
     let window = this.changeVisibility.window;
-    this.setState((state) => Object.assign(state, {[window]: FULL_SCREEN}))
+    this.setState((state) => Object.assign(state, {[window]: !state[window]}))
+  }
+
+  width(window){
+    let width = (this.state.editor && this.state.viewer)? ((window === "editor")?5:6):12
+    return width
+  }
+
+  componentDidMount(){
+    this.animation = <Player autoplay loop mode="normal" 
+    src="https://assets3.lottiefiles.com/packages/lf20_hcae8wxn.json" style={{width: "30vh"}} />
   }
 
   render (){
     return (
       <Grid
           container
-          direction="column"
-          justifyContent="center"
-          alignItems="center"
-          spaicing={0}
+          direction="row"
+          justifyContent="space-evenly"
+          alignItems="stretch"
+          spaicing={10}
           style={{ minHeight: '100vh'}}
         >
-          <Grid item md={6} sm={12} style={{width:'100%'}}>
-            <AppNav handleChange={this.langChange} lang={this.state.lang} changeVisibility={this.changeVisibility}/>
+          <Grid item xs={12}>
+            <AppNav handleChange={this.langChange} lang={this.state.lang} changeVisibility={this.changeVisibility} editor={this.state.editor} viewer={this.state.viewer} />
           </Grid>
 
-          {(this.state.editor)? <Grid item md={6} sm={12} style={{width:'100%'}}>
+                   
+          {(this.state.editor)? <Grid item md={this.width("editor")} xs={12} >
             <Editor id="editor" onChange={this.handleEditorTextChange} text={this.state.source} />            
           </Grid> : null}
           
-          {(this.state.viewer)? <Grid item md={6} sm={12}>
+          {(this.state.viewer)? <Grid item md={this.width("preview")} xs={12}>
             <Paper style={{padding:'2.5%'}} elevation={7}>
               <Previewer id="preview" data={this.state.source} lang={this.state.lang}/>
             </Paper>
           </Grid> : null}
+
+          {(!this.state.viewer && !this.state.editor)? this.animation: null }
           
         </Grid>
     );
   }
 }
-export {DEFAULT, FULL_SCREEN, HIDE};
+
 export default App;

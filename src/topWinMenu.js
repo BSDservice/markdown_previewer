@@ -1,12 +1,12 @@
-import MinimizeTwoToneIcon from '@material-ui/icons/Minimize';
+/* import MinimizeTwoToneIcon from '@material-ui/icons/Minimize';
 import MaximizeTwoToneIcon from '@material-ui/icons/Maximize';
-import CloseTwoToneIcon from '@material-ui/icons/Close';
-import {IconButton, Tooltip, Typography} from '@material-ui/core'
+import CloseTwoToneIcon from '@material-ui/icons/Close'; */
+import {/* IconButton, Tooltip, */ Typography} from '@material-ui/core'
 
 let style = {
     container: {
         display: 'flex',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         borderBottom:'solid gray 1px',
         marginBottom: '0.5rem'
     },
@@ -15,9 +15,8 @@ let style = {
 export default function TopWindowMenu(props){ 
 
     return (<div style={style.container}>
-        <span></span>
         <Typography variant="h6" component="h6">{props.name}</Typography>
-        <span>
+        {/* <span>
             <Tooltip title="Minimize" aria-label="Minimize">
                 <IconButton color="secondary" aria-label="Minimize">
                     <MinimizeTwoToneIcon/>
@@ -33,6 +32,6 @@ export default function TopWindowMenu(props){
                     <CloseTwoToneIcon/>
                 </IconButton>
             </Tooltip>      
-        </span>
+        </span> */}
         </div>)
 }
